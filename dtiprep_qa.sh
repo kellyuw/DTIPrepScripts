@@ -1,5 +1,6 @@
 #!/bin/bash
 #Prepares SIEMENS DTI data for dtiprep
+#Modification of script from CogNeuroStats blog: http://blog.cogneurostats.com/?p=607
 
 if [ $# -lt 3 ]; then
  echo "Usage: ./dtiprep_qa <nifti_file> <bvecs> <bvals>"
@@ -36,8 +37,7 @@ else
 	exit
 fi
 
-exit
-echo "Files found, proceeding with Quality Check ..."
+echo "Files found, proceeding with quality check ..."
 
 #Create a temporary working space with date & time
 foldername=`date +"%m%d%y_%T" | sed 's/://g'`
