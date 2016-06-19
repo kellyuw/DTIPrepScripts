@@ -88,31 +88,23 @@ cd ${TMP_DIR}
 
 #Convert DWI image data from NIFTI to NRRD
 echo "Converting DWI image data from NIFTI -> NRRD ..."
-/usr/local/Slicer-4.5.0-1-linux-amd64/Slicer --launch DWIConvert --inputVolume dwi.nii --inputBVectors bvec.txt --inputBValues bval.txt --conversionMode FSLToNrrd -o dwi.nrrd
+/usr/local/DTIPrepPackage/DTIPrep/DWIConvert --inputVolume dwi.nii --inputBVectors bvec.txt --inputBValues bval.txt --conversionMode FSLToNrrd -o dwi.nrrd
 
 #Run default QA check
 echo "Running default DTIPrep QA check ..."
-#/usr/local/DTIPrepPackage/DTIPrep -c -d -p ${LAB_DIR}/scripts/DTI/DTIPrep/test.xml -w dwi.nrrd --numberOfThreads 24
-/usr/local/DTIPrepPackage/DTIPrep -c -p ${LAB_DIR}/scripts/DTI/DTIPrep/${DTINAME}.xml -w dwi.nrrd
+/usr/local/DTIPrepPackage/DTIPrep -c -d -p ${LAB_DIR}/scripts/DTI/DTIPrep/test.xml -w dwi.nrrd --numberOfThreads 24
 
 #Convert corrected DWI image data from NRRD to NIFTI
 echo "Converting corrected DWI image data from NRRD -> NIFTI ..."
-/usr/local/Slicer-4.5.0-1-linux-amd64/Slicer --launch DWIConvert --inputVolume dwi_QCed.nrrd --outputVolume dwi_QCed.nii --outputBVectors dwi_QCed.bvec --outputBValues dwi_QCed.bval --conversionMode NrrdToFSL
-
-#Convert corrected DWI image data from NRRD to NIFTI
-#echo "Converting colorFA from NRRD -> NIFTI ..."
-#cp dwi_QCed.bvec dwi_QCed_DTI_colorFA.bvec
-#cp dwi_QCed.bval dwi_QCed_DTI_colorFA.bval
-#/usr/local/Slicer-4.5.0-1-linux-amd64/Slicer --launch DWIConvert --inputVolume dwi_QCed_DTI_colorFA.nrrd --outputVolume dwi_QCed_DTI_colorFA.nii --outputBVectors dwi_QCed_DTI_colorFA.bvec --outputBValues dwi_QCed_DTI_colorFA.bval --conversionMode NrrdToFSL
-
+/usr/local/DTIPrepPackage/DTIPrep/DWIConvert --inputVolume dwi_QCed.nrrd --outputVolume dwi_QCed.nii --outputBVectors dwi_QCed.bvec --outputBValues dwi_QCed.bval --conversionMode NrrdToFSL
 
 #Echo DTI prep results
-echo "Total Good Gradients: `cat dwi_QCed.bvec | wc -l`"
+#echo "Total Good Gradients: `cat dwi_QCed.bvec | wc -l`"
 
 #Save QA data to subject's QA directory
 echo "Saving QA data to ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep/ ..."
 mkdir -p ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep
-mv ${TMP_DIR} ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep/
+cp -r ${TMP_DIR}/* ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep/
 
 #Parse QA to get list of bad directions
 if [[ -e ${LAB_DIR}/scripts/Preprocessing/transpose.awk ]]; then
