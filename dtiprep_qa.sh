@@ -111,8 +111,7 @@ echo "Total Good Gradients: `cat dwi_QCed.bvec | wc -l`"
 
 #Save QA data to subject's QA directory
 echo "Saving QA data to ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep/ ..."
-mkdir -p ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep
-mv ${TMP_DIR} ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep/
+mv ${TMP_DIR} ${SUBJECT_DIR}/QA/${DTINAME}_DTIPrep
 
 #Parse QA to get list of bad directions
 if [[ -e ${LAB_DIR}/scripts/Preprocessing/transpose.awk ]]; then
